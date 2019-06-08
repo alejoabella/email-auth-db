@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendEmail;
 
 class HomeController extends Controller
 {
@@ -29,8 +30,10 @@ class HomeController extends Controller
     }
 
     public function sendEmail()
-    {
-        Mail::to('hello@friend.com')->send(new TestEmail()); 
+    {   
+        
+        $emailJob = new SendEmail();
+        dispatch($emailJob)->delay(now()->addMinutes(1));
 
         return view('home');
     }
